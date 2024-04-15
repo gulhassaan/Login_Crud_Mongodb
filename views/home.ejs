@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="/home.css">
+</head>
+<body>
+    <h1 style="text-align: center;">Welcome to Home Page</h1>
+
+    <!-- Add Product Form -->
+    <form id="add-form" action="/addProduct" method="post">
+        <input type="text" name="name" placeholder="Product Name" required>
+        <input type="text" name="description" placeholder="Product Description" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <button class="add-btn" type="submit">Add Product</button>
+    </form>
+
+    <!-- Products Table -->
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        <% products.forEach(product => { %>
+            <tr>
+                <td><%= product.name %></td>
+                <td><%= product.description %></td>
+                <td>$<%= product.price.toFixed(2) %></td>
+                <td>
+                    <!-- Edit Product Form -->
+                    <form action="/updateProduct/<%= product._id %>" method="post">
+                        <input type="text" name="name" placeholder="New Name" class="edit-input" required>
+                        <input type="text" name="description" placeholder="New Description" class="edit-input" required>
+                        <input type="number" name="price" placeholder="New Price" class="edit-input" required>
+                        <button type="button" class="edit-btn">Edit</button>
+                        <button type="submit" class="submit-btn" style="display: none;">Submit</button>
+                    </form>
+                    <!-- Delete Product Form -->
+                    <form action="/deleteProduct/<%= product._id %>" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+
+    <script>
+        // JavaScript to toggle input fields visibility on button click
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const form = button.parentElement;
+                const inputFields = form.querySelectorAll('.edit-input');
+                const submitButton = form.querySelector('.submit-btn');
+
+                inputFields.forEach(input => {
+                    input.style.display = 'inline-block';
+                });
+                submitButton.style.display = 'inline-block';
+                button.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
